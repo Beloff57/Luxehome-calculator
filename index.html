@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxehome-calc</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <div class="calc-header">
+        <div class="calc-h-left">
+            <h1 class="calc-title">Рассчитать шторы</h1>
+            <p class="calc-opis">Расчет займет не более 5 минут.</p>
+        </div>
+        <div class="calc-h-right">
+            <div class="cr-opis">
+                <h1 class="calc-summa">155.000 Рублей</h1>
+                <p class="calc-srok">Срок изготовления до 10 рабочих дней</p>
+            </div>
+            <div class="knopki">
+              <div class="merge-btn-container">
+                <a href="" class="text-part">Отправить заявку</a>
+                <a href="" class="icon-part">
+    <img src="images/Arrow 76.svg" class="icon-part-tw arrow-tw arrow-1tw" alt="">
+    <img src="images/Arrow 76inv.svg" class="icon-part-tw arrow-tw arrow-2tw" alt="">
+                </a>
+              </div>
+        </div>
+        </div>
+    </div>
+    <div class="calc-windows">
+        <div class="c-window-1">
+            <p class="cw-zag">Окно 1</p>
+            <button class="remove-btn">
+                <img src="images/delete-icon.svg" alt="">
+            </button>
+        </div>
+        <div class="c-window-1">
+            <p class="cw-zag">Окно 2</p>
+            <button class="remove-btn">
+                <img src="images/delete-icon.svg" alt="">
+            </button>
+        </div>
+        <div class="c-window-add">
+            <p class="add-cw">Добавить окно</p>
+            <button class="add-win">
+                +
+            </button>
+        </div>
+    </div>
+    <div class="calc-block">
+        <div class="calc-block-left">
+            <h2 class="calc-vopros">Какие шторы вам нужны?</h2>
+            <div class="shtory-tabs">
+    <div class="sht-tab" data-target="rim">Римские шторы</div>
+    <div class="sht-tab is-active" data-target="classic">Классические шторы портьеры</div>
+</div>
+            <div class="shtory-icon">
+                <img src="images/classic-sht.svg" alt="" class="shtory-img">
+            </div>
+        </div>
+        <div class="content-classic-shtory is-active">
+        <div class="calc-block-right">
+            <div class="calc-fields">
+            <div class="calc-field">
+  <input
+    type="text"
+    name="height"
+    inputmode="decimal"
+    autocomplete="off"
+    placeholder=" "
+    required
+    data-max="3.1"
+  >
+  <label>Высота от пола до потолка, м (Макс. 3.1 метра)</label>
+</div>
+
+<div class="calc-field">
+  <input
+    type="text"
+    name="cornice_length"
+    inputmode="decimal"
+    autocomplete="off"
+    placeholder=" "
+    required
+  >
+  <label>Длина карниза, м</label>
+</div>
+        </div>
+
+        <h3 class="koef-sb">Выберите коэффициент сборки</h3>
+        <div class="koef-tabs">
+            <div class="koef-btn is-active" data-koef="1.5">
+                <img src="images/ks-1.svg" alt="" class="ks-icon">
+                <p class="koef-text">1:1.5</p>
+            </div>
+            <div class="koef-btn" data-koef="2">
+                <img src="images/ks-2.svg" alt="" class="ks-icon">
+                <p class="koef-text">1:2</p>
+            </div>
+            <div class="koef-btn" data-koef="2.5">
+                <img src="images/ks-3.svg" alt="" class="ks-icon">
+                <p class="koef-text">1:2.5</p>
+            </div>
+        </div>
+        <h3 class="tkan-select">Выберите ткань</h3>
+        <div class="ts-tabs">
+            <div class="tkan-tab is-active" data-price="2000">Блэкаут</div>
+            <div class="tkan-tab" data-price="2200">Димаут</div>
+            <div class="tkan-tab" data-price="2500">Фактурная ткань</div>
+        </div>
+        <div class="cbr-bottom">
+            <button class="add-to-calc">Добавить в расчет</button>
+            <div class="calc-price">—</div>
+        </div>
+
+        </div>
+        </div>
+
+        
+        <div class="content-rim-shtory">
+            <div class="calc-block-right">
+            <div class="calc-fields">
+            <div class="calc-field">
+  <input
+    type="text"
+    name="windowsill_width"
+    inputmode="decimal"
+    autocomplete="off"
+    placeholder=" "
+    required
+  >
+  <label>Ширина подоконника, см</label>
+</div>
+
+<div class="calc-field">
+  <input
+    type="text"
+    name="window_height"
+    inputmode="decimal"
+    autocomplete="off"
+    placeholder=" "
+    required
+  >
+  <label>Высота окна, см</label>
+</div>
+        </div>
+
+        <h3 class="tkan-select">Выберите ткань</h3>
+        <div class="ts-tabs">
+            <div class="tkan-tab is-active" data-price="2000">Блэкаут</div>
+            <div class="tkan-tab" data-price="2200"м>Димаут</div>
+            <div class="tkan-tab" data-price="2500">Фактурная ткань</div>
+        </div>
+        <h2 class="rsht-karniz">Карниз входит в стоимость.</h2>
+        <h3 class="rsht-dop-zag">Дополнительно</h3>
+        <div class="dop-tabs">
+            <div class="dop-btn" data-extra="montage">
+                <p class="dop-opis">Монтаж</p>
+                <p class="dop-price">+3.500₽</p>
+            </div>
+            <div class="dop-btn" data-extra="delivery">
+                <p class="dop-opis">Доставка</p>
+                <p class="dop-price">+1.000₽</p>
+            </div>
+        </div>
+        <div class="cbr-bottom">
+            <button class="add-to-calc">Добавить в расчет</button>
+            <div class="calc-price">55.000 Рублей</div>
+        </div>
+
+        </div>
+        </div>
+    </div>
+    
+
+
+
+
+
+
+<script>
+(function () {
+  function sanitizeDecimal(raw) {
+    // оставляем только цифры + . ,
+    let v = raw.replace(/[^\d.,]/g, '');
+
+    // если есть и точка и запятая — считаем запятую десятичным разделителем,
+    // а остальные разделители выкидываем
+    const hasDot = v.includes('.');
+    const hasComma = v.includes(',');
+
+    if (hasDot && hasComma) {
+      // оставляем только запятую как десятичный, точки убираем
+      v = v.replace(/\./g, '');
+    }
+
+    // теперь делаем единый разделитель: запятая
+    // (так удобнее вводить в RU-локали; при расчётах заменим на точку)
+    // разрешаем только одну запятую
+    const parts = v.split(',');
+    if (parts.length > 2) {
+      v = parts[0] + ',' + parts.slice(1).join('');
+    }
+
+    // если начинается с запятой — превращаем в "0,"
+    if (v.startsWith(',')) v = '0' + v;
+
+    // убираем ведущие нули типа 00012 (но оставляем 0,5)
+    v = v.replace(/^0+(?=\d)/, '0');
+
+    return v;
+  }
+
+  document.addEventListener('input', function (e) {
+    const input = e.target;
+    if (!input.matches('.calc-field input')) return;
+
+    const before = input.value;
+    const after = sanitizeDecimal(before);
+
+    if (before !== after) input.value = after;
+  });
+
+  document.addEventListener('blur', function (e) {
+    const input = e.target;
+    if (!input.matches('.calc-field input')) return;
+
+    let v = sanitizeDecimal(input.value);
+
+    // если заканчивается на запятую — убираем
+    if (v.endsWith(',')) v = v.slice(0, -1);
+
+    // max для высоты (если задан data-max)
+    const maxAttr = input.dataset.max;
+    if (maxAttr && v) {
+      const num = parseFloat(v.replace(',', '.'));
+      const max = parseFloat(maxAttr);
+      if (!Number.isNaN(num) && num > max) v = String(max).replace('.', ',');
+    }
+
+    input.value = v;
+  }, true);
+})();
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const tabs = document.querySelectorAll('.sht-tab');
+  const classic = document.querySelector('.content-classic-shtory');
+  const rim = document.querySelector('.content-rim-shtory');
+  const img = document.querySelector('.shtory-img');
+
+  const images = {
+    classic: 'images/classic-sht.svg',
+    rim: 'images/rim-sht.svg'
+  };
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('is-active'));
+      tab.classList.add('is-active');
+
+      const type = tab.dataset.target;
+      calcState.type = type;
+
+      classic.classList.toggle('is-active', type === 'classic');
+      rim.classList.toggle('is-active', type === 'rim');
+
+      img.src = images[type];
+
+      // при переключении — сбрасываем цену
+      document.querySelector('.content-classic-shtory .calc-price').textContent = '—';
+    });
+  });
+});
+</script>
+
+
+
+
+<script>
+const calcState = {
+  type: 'classic',   // 👈 КЛЮЧЕВО
+  classic: {
+    length: 0,
+    koef: 1.5,
+    fabricPrice: 2000
+  }
+};
+</script>
+
+<script>
+function recalcPrice() {
+  if (calcState.type !== 'classic') return;
+
+  const { length, koef, fabricPrice } = calcState.classic;
+  const priceEl = document.querySelector('.content-classic-shtory .calc-price');
+
+  if (!length) {
+    priceEl.textContent = '—';
+    return;
+  }
+
+  const price = length * koef * fabricPrice * 2;
+
+  priceEl.textContent =
+    Math.round(price).toLocaleString('ru-RU') + ' ₽';
+}
+</script>
+
+<script>
+document.addEventListener('input', e => {
+  if (calcState.type !== 'classic') return;
+
+  const input = e.target;
+
+  if (input.name === 'cornice_length') {
+    calcState.classic.length =
+      parseFloat(input.value.replace(',', '.')) || 0;
+    recalcPrice();
+  }
+});
+</script>
+
+<script>
+document.querySelectorAll('.koef-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (calcState.type !== 'classic') return;
+
+    document.querySelectorAll('.koef-btn')
+      .forEach(b => b.classList.remove('is-active'));
+
+    btn.classList.add('is-active');
+    calcState.classic.koef = parseFloat(btn.dataset.koef);
+    recalcPrice();
+  });
+});
+</script>
+
+<script>
+document.querySelectorAll('.content-classic-shtory .tkan-tab')
+  .forEach(tab => {
+    tab.addEventListener('click', () => {
+      document
+        .querySelectorAll('.content-classic-shtory .tkan-tab')
+        .forEach(t => t.classList.remove('is-active'));
+
+      tab.classList.add('is-active');
+      calcState.classic.fabricPrice = parseFloat(tab.dataset.price);
+      recalcPrice();
+    });
+  });
+</script>
+
+
+
+<script>
+calcState.rim = {
+  width: 0,     // см
+  height: 0,    // см
+  fabricPrice: 2000, 
+  extras: {
+    montage: false,
+    delivery: false
+  }
+};
+</script>
+
+<script>
+function recalcRimPrice() {
+  if (calcState.type !== 'rim') return;
+
+  const { width, height, fabricPrice, extras } = calcState.rim;
+  const priceEl = document.querySelector('.content-rim-shtory .calc-price');
+
+  if (!width || !height) {
+    priceEl.textContent = '—';
+    return;
+  }
+
+  const w = width / 100;
+  const h = (height + 15) / 100;
+
+  let price =
+    5000 * w +                  // базовая часть
+    1000 +                      // карниз
+    fabricPrice * (w + 0.2) +   // ✅ ткань (ИСПРАВЛЕНО)
+    h * w * 2500 +              // пошив
+    h * w * 500;                // лента
+
+  // допы
+  if (extras.montage) price += 3500;
+  if (extras.delivery) price += 1000;
+
+  priceEl.textContent =
+    Math.round(price).toLocaleString('ru-RU') + ' ₽';
+}
+
+</script>
+
+<script>
+document.addEventListener('input', e => {
+  if (calcState.type !== 'rim') return;
+
+  const input = e.target;
+
+  if (input.name === 'windowsill_width') {
+    calcState.rim.width =
+      parseFloat(input.value.replace(',', '.')) || 0;
+    recalcRimPrice();
+  }
+
+  if (input.name === 'window_height') {
+    calcState.rim.height =
+      parseFloat(input.value.replace(',', '.')) || 0;
+    recalcRimPrice();
+  }
+});
+</script>
+
+<script>
+document
+  .querySelectorAll('.content-rim-shtory .tkan-tab')
+  .forEach(tab => {
+    tab.addEventListener('click', () => {
+      document
+        .querySelectorAll('.content-rim-shtory .tkan-tab')
+        .forEach(t => t.classList.remove('is-active'));
+
+      tab.classList.add('is-active');
+
+      calcState.rim.fabricPrice =
+        parseFloat(tab.dataset.price) || 0;
+
+      recalcRimPrice();
+    });
+  });
+
+</script>
+
+<script>
+document
+  .querySelectorAll('.content-rim-shtory .dop-btn')
+  .forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('is-active');
+
+      const type = btn.dataset.extra;
+      calcState.rim.extras[type] = btn.classList.contains('is-active');
+
+      recalcRimPrice();
+    });
+  });
+</script>
+
+
+</body>
+</html>
