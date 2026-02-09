@@ -180,9 +180,15 @@ body {
     gap: 2.125vw;
     padding-right: 0.938vw;
     border-right: 0.07vw solid #D7D7D7;
-    margin-left: 1.313vw;
+    padding-left: 1.313vw;
     padding-top: 0.813vw;
     padding-bottom: 0.625vw;
+    cursor: pointer;
+}
+
+
+.c-window-1.is-active {
+  border-bottom: 0.14vw solid #000000;
 }
 
 .cw-zag {
@@ -214,6 +220,7 @@ body {
     align-items: center;
     gap: 1.375vw;
     padding-left: 1.313vw;
+    cursor: pointer;
 }
 
 .add-cw {
@@ -452,7 +459,7 @@ gap: 0.738vw;
     padding: 0.375vw 1.361vw;
     border-radius: 1.469vw;
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: all 0.45s ease;
 }
 
 .tkan-tab.is-active {
