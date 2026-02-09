@@ -29,24 +29,7 @@
         </div>
     </div>
     <div class="calc-windows">
-        <div class="c-window-1">
-            <p class="cw-zag">Окно 1</p>
-            <button class="remove-btn">
-                <img src="images/delete-icon.svg" alt="">
-            </button>
-        </div>
-        <div class="c-window-1">
-            <p class="cw-zag">Окно 2</p>
-            <button class="remove-btn">
-                <img src="images/delete-icon.svg" alt="">
-            </button>
-        </div>
-        <div class="c-window-add">
-            <p class="add-cw">Добавить окно</p>
-            <button class="add-win">
-                +
-            </button>
-        </div>
+        
     </div>
     <div class="calc-block">
         <div class="calc-block-left">
@@ -149,7 +132,7 @@
         <h3 class="tkan-select">Выберите ткань</h3>
         <div class="ts-tabs">
             <div class="tkan-tab is-active" data-price="2000">Блэкаут</div>
-            <div class="tkan-tab" data-price="2200"м>Димаут</div>
+            <div class="tkan-tab" data-price="2200">Димаут</div>
             <div class="tkan-tab" data-price="2500">Фактурная ткань</div>
         </div>
         <h2 class="rsht-karniz">Карниз входит в стоимость.</h2>
@@ -166,7 +149,7 @@
         </div>
         <div class="cbr-bottom">
             <button class="add-to-calc">Добавить в расчет</button>
-            <div class="calc-price">55.000 Рублей</div>
+            <div class="calc-price">—</div>
         </div>
 
         </div>
@@ -243,37 +226,9 @@
   }, true);
 })();
 </script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const tabs = document.querySelectorAll('.sht-tab');
-  const classic = document.querySelector('.content-classic-shtory');
-  const rim = document.querySelector('.content-rim-shtory');
-  const img = document.querySelector('.shtory-img');
 
-  const images = {
-    classic: 'images/classic-sht.svg',
-    rim: 'images/rim-sht.svg'
-  };
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('is-active'));
-      tab.classList.add('is-active');
 
-      const type = tab.dataset.target;
-      calcState.type = type;
-
-      classic.classList.toggle('is-active', type === 'classic');
-      rim.classList.toggle('is-active', type === 'rim');
-
-      img.src = images[type];
-
-      // при переключении — сбрасываем цену
-      document.querySelector('.content-classic-shtory .calc-price').textContent = '—';
-    });
-  });
-});
-</script>
 
 
 
@@ -288,6 +243,29 @@ const calcState = {
   }
 };
 </script>
+
+<script>
+function resetCalcStateForNewWindow() {
+  calcState.type = 'classic';
+
+  calcState.classic = {
+    length: 0,
+    koef: 1.5,
+    fabricPrice: 2000
+  };
+
+  calcState.rim = {
+    width: 0,
+    height: 0,
+    fabricPrice: 2000,
+    extras: {
+      montage: false,
+      delivery: false
+    }
+  };
+}
+</script>
+
 
 <script>
 function recalcPrice() {
@@ -313,12 +291,26 @@ document.addEventListener('input', e => {
   if (calcState.type !== 'classic') return;
 
   const input = e.target;
+  if (input.name !== 'cornice_length') return;
 
-  if (input.name === 'cornice_length') {
-    calcState.classic.length =
-      parseFloat(input.value.replace(',', '.')) || 0;
-    recalcPrice();
+  // 1️⃣ обновляем calcState
+  calcState.classic.length =
+    parseFloat(input.value.replace(',', '.')) || 0;
+
+  // 2️⃣ СБРАСЫВАЕМ участие окна в общей сумме
+  const win = windows.find(w => w.id === activeWindowId);
+  if (win) {
+    win.inTotal = false;
   }
+
+  // 3️⃣ локальный пересчёт окна
+  recalcPrice();
+
+  // 4️⃣ сохраняем окно
+  syncActiveWindow();
+
+  // 5️⃣ пересчитываем общую сумму
+  calculateTotalPrice();
 });
 </script>
 
@@ -333,6 +325,9 @@ document.querySelectorAll('.koef-btn').forEach(btn => {
     btn.classList.add('is-active');
     calcState.classic.koef = parseFloat(btn.dataset.koef);
     recalcPrice();
+syncActiveWindow();
+calculateTotalPrice();
+
   });
 });
 </script>
@@ -348,6 +343,9 @@ document.querySelectorAll('.content-classic-shtory .tkan-tab')
       tab.classList.add('is-active');
       calcState.classic.fabricPrice = parseFloat(tab.dataset.price);
       recalcPrice();
+syncActiveWindow();
+calculateTotalPrice();
+
     });
   });
 </script>
@@ -384,7 +382,7 @@ function recalcRimPrice() {
   let price =
     5000 * w +                  // базовая часть
     1000 +                      // карниз
-    fabricPrice * (w + 0.2) +   // ✅ ткань (ИСПРАВЛЕНО)
+    fabricPrice * (w + 0.2) +   // ткань (ИСПРАВЛЕНО)
     h * w * 2500 +              // пошив
     h * w * 500;                // лента
 
@@ -403,18 +401,27 @@ document.addEventListener('input', e => {
   if (calcState.type !== 'rim') return;
 
   const input = e.target;
+  if (
+    input.name !== 'windowsill_width' &&
+    input.name !== 'window_height'
+  ) return;
+
+  const win = windows.find(w => w.id === activeWindowId);
+  if (win) win.inTotal = false;
 
   if (input.name === 'windowsill_width') {
     calcState.rim.width =
       parseFloat(input.value.replace(',', '.')) || 0;
-    recalcRimPrice();
   }
 
   if (input.name === 'window_height') {
     calcState.rim.height =
       parseFloat(input.value.replace(',', '.')) || 0;
-    recalcRimPrice();
   }
+
+  recalcRimPrice();
+  syncActiveWindow();
+  calculateTotalPrice();
 });
 </script>
 
@@ -433,6 +440,9 @@ document
         parseFloat(tab.dataset.price) || 0;
 
       recalcRimPrice();
+syncActiveWindow();
+calculateTotalPrice();
+
     });
   });
 
@@ -449,10 +459,410 @@ document
       calcState.rim.extras[type] = btn.classList.contains('is-active');
 
       recalcRimPrice();
+syncActiveWindow();
+calculateTotalPrice();
+
     });
   });
 </script>
 
+
+<script>
+function setCurtainType(type) {
+  const win = windows.find(w => w.id === activeWindowId);
+  if (!win) return;
+
+  calcState.type = type;
+
+  if (type === 'classic') {
+    calcState.classic = { ...win.classic };
+  } else {
+    calcState.rim = JSON.parse(JSON.stringify(win.rim));
+  }
+
+  // табы
+  document.querySelectorAll('.sht-tab')
+    .forEach(t => t.classList.remove('is-active'));
+  document
+    .querySelector(`.sht-tab[data-target="${type}"]`)
+    ?.classList.add('is-active');
+
+  // контент
+  document.querySelector('.content-classic-shtory')
+    .classList.toggle('is-active', type === 'classic');
+  document.querySelector('.content-rim-shtory')
+    .classList.toggle('is-active', type === 'rim');
+
+  // картинка
+  document.querySelector('.shtory-img').src =
+    type === 'classic'
+      ? 'images/classic-sht.svg'
+      : 'images/rim-sht.svg';
+
+  // обновляем поля
+  if (type === 'classic') {
+    setInput('cornice_length', win.classic.length);
+    setInput('height', win.classic.height);
+    recalcPrice();
+  } else {
+    setInput('windowsill_width', win.rim.width);
+    setInput('window_height', win.rim.height);
+    recalcRimPrice();
+  }
+
+  calculateTotalPrice();
+}
+
+</script>
+
+
+<script>
+document.querySelectorAll('.sht-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    saveCurrentWindow();
+    setCurtainType(tab.dataset.target);
+  });
+});
+
+</script>
+
+
+
+
+<script>
+const MAX_WINDOWS = 9;
+
+let windows = [];
+let activeWindowId = null;
+
+function createEmptyWindow(id) {
+  return {
+    id,
+    isTouched: false,
+    inTotal: false,
+    type: 'classic',
+
+    classic: {
+      height: 0,
+      length: 0,
+      koef: 1.5,
+      fabricPrice: 2000
+    },
+
+    rim: {
+      width: 0,
+      height: 0,
+      fabricPrice: 2000,
+      extras: {
+        montage: false,
+        delivery: false
+      }
+    }
+  };
+}
+</script>
+<script>
+function initWindows() {
+  const first = createEmptyWindow(1);
+  windows.push(first);
+  activeWindowId = 1;
+
+  renderWindows();
+  loadWindowState(first);
+}
+
+document.addEventListener('DOMContentLoaded', initWindows);
+</script>
+<script>
+function renderWindows() {
+  const container = document.querySelector('.calc-windows');
+  container.innerHTML = '';
+
+  windows.forEach(win => {
+    const el = document.createElement('div');
+    el.className = 'c-window-1';
+    
+    if (win.id === activeWindowId) el.classList.add('is-active');
+
+    el.innerHTML = `
+      <p class="cw-zag">Окно ${win.id}</p>
+      <button class="remove-btn">
+        <img src="images/delete-icon.svg" alt="">
+      </button>
+    `;
+
+    el.addEventListener('click', () => switchWindow(win.id));
+
+    el.querySelector('.remove-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      removeWindow(win.id);
+    });
+
+    container.appendChild(el);
+  });
+
+  // кнопка добавления
+  if (windows.length < MAX_WINDOWS) {
+    const add = document.createElement('div');
+    add.className = 'c-window-add';
+    add.innerHTML = `
+      <p class="add-cw">Добавить окно</p>
+      <button class="add-win">+</button>
+    `;
+    add.addEventListener('click', addWindow);
+    container.appendChild(add);
+  }
+}
+</script>
+<script>
+function addWindow() {
+  if (windows.length >= MAX_WINDOWS) return;
+
+  syncActiveWindow();
+
+  const id = Math.max(...windows.map(w => w.id)) + 1;
+  const win = createEmptyWindow(id);
+
+  windows.push(win);
+  activeWindowId = id;
+
+  // КЛЮЧЕВО
+  calcState.rim = JSON.parse(JSON.stringify(win.rim));
+  calcState.classic = { ...win.classic };
+  calcState.type = win.type;
+
+  renderWindows();
+  loadWindowState(win);
+
+  calculateTotalPrice();
+}
+</script>
+<script>
+function removeWindow(id) {
+  if (windows.length === 1) return;
+
+  windows = windows.filter(w => w.id !== id);
+
+  if (activeWindowId === id) {
+    activeWindowId = windows[0].id;
+    loadWindowState(windows[0]);
+  }
+
+  renderWindows();
+
+  calculateTotalPrice();
+
+}
+</script>
+<script>
+function switchWindow(id) {
+  if (id === activeWindowId) return;
+
+  saveCurrentWindow();
+  activeWindowId = id;
+
+  const win = windows.find(w => w.id === id);
+  loadWindowState(win);
+  renderWindows();
+}
+</script>
+<script>
+function saveCurrentWindow() {
+  const win = windows.find(w => w.id === activeWindowId);
+  if (!win) return;
+
+  win.type = calcState.type;
+
+  if (win.type === 'classic') {
+    win.classic = { ...calcState.classic };
+    win.classic.height = getInputValue('height');
+  } else {
+    win.rim = JSON.parse(JSON.stringify(calcState.rim));
+  }
+
+  calculateTotalPrice();
+
+}
+</script>
+
+<script>
+function syncActiveWindow() {
+  const win = windows.find(w => w.id === activeWindowId);
+  if (!win) return;
+
+  win.isTouched = true;
+
+  win.type = calcState.type;
+
+  if (calcState.type === 'classic') {
+    win.classic = {
+      ...calcState.classic,
+      height: getInputValue('height')
+    };
+  } else {
+    win.rim = JSON.parse(JSON.stringify(calcState.rim));
+  }
+}
+</script>
+
+<script>
+function loadWindowState(win) {
+  setCurtainType(win.type);
+
+  if (win.type === 'classic') {
+    calcState.classic = { ...win.classic };
+
+    setInput('cornice_length', win.classic.length);
+    setInput('height', win.classic.height);
+
+    document.querySelectorAll('.koef-btn')
+      .forEach(b =>
+        b.classList.toggle(
+          'is-active',
+          parseFloat(b.dataset.koef) === win.classic.koef
+        )
+      );
+
+    document.querySelectorAll('.content-classic-shtory .tkan-tab')
+      .forEach(t =>
+        t.classList.toggle(
+          'is-active',
+          parseFloat(t.dataset.price) === win.classic.fabricPrice
+        )
+      );
+
+    recalcPrice();
+calculateTotalPrice();
+
+  } else {
+    calcState.rim = JSON.parse(JSON.stringify(win.rim));
+
+    setInput('windowsill_width', win.rim.width);
+    setInput('window_height', win.rim.height);
+
+    document.querySelectorAll('.content-rim-shtory .tkan-tab')
+      .forEach(t =>
+        t.classList.toggle(
+          'is-active',
+          parseFloat(t.dataset.price) === win.rim.fabricPrice
+        )
+      );
+
+    document.querySelectorAll('.dop-btn')
+      .forEach(b =>
+        b.classList.toggle(
+          'is-active',
+          win.rim.extras[b.dataset.extra]
+        )
+      );
+
+    recalcRimPrice();
+calculateTotalPrice();
+
+  }
+
+document.querySelectorAll('.add-to-calc').forEach(btn => {
+  updateAddToCalcButton(btn, win.inTotal);
+});
+
+
+}
+
+</script>
+<script>
+function getInputValue(name) {
+  const el = document.querySelector(`[name="${name}"]`);
+  return el ? parseFloat(el.value.replace(',', '.')) || 0 : 0;
+}
+
+function setInput(name, value) {
+  const el = document.querySelector(`[name="${name}"]`);
+  if (el) el.value = value ? value.toString().replace('.', ',') : '';
+}
+</script>
+
+
+
+
+<script>
+function calculateWindowPrice(win) {
+  if (win.type === 'classic') {
+    const { length, koef, fabricPrice } = win.classic;
+    if (!length) return 0;
+
+    return length * koef * fabricPrice * 2;
+  }
+
+  if (win.type === 'rim') {
+    const { width, height, fabricPrice, extras } = win.rim;
+    if (!width || !height) return 0;
+
+    const w = width / 100;
+    const h = (height + 15) / 100;
+
+    let price =
+      5000 * w +
+      1000 +
+      fabricPrice * (w + 0.2) +
+      h * w * 2500 +
+      h * w * 500;
+
+    if (extras.montage) price += 3500;
+    if (extras.delivery) price += 1000;
+
+    return price;
+  }
+
+  return 0;
+}
+</script>
+<script>
+function calculateTotalPrice() {
+  let total = 0;
+
+  windows.forEach(win => {
+  if (!win.inTotal) return;
+  total += calculateWindowPrice(win);
+});
+
+
+  const el = document.querySelector('.calc-summa');
+
+  el.textContent = total
+    ? Math.round(total).toLocaleString('ru-RU') + ' ₽'
+    : '—';
+}
+</script>
+
+
+
+<script>
+function updateAddToCalcButton(btn, inTotal) {
+  if (inTotal) {
+    btn.textContent = 'Удалить из расчета';
+    btn.classList.add('is-remove');
+  } else {
+    btn.textContent = 'Добавить в расчет';
+    btn.classList.remove('is-remove');
+  }
+}
+</script>
+<script>
+document.querySelectorAll('.add-to-calc').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const win = windows.find(w => w.id === activeWindowId);
+    if (!win) return;
+
+    saveCurrentWindow();
+
+    win.inTotal = !win.inTotal;
+
+    updateAddToCalcButton(btn, win.inTotal);
+    calculateTotalPrice();
+  });
+});
+
+</script>
 
 </body>
 </html>
